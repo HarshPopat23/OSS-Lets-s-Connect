@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>OSS | Let's Connect — FAQ</title>
+<meta name="description" content="Answers for the OSS | Let's Connect community — open source basics, Git & GitHub, and more." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --paper: #f6f5f0;
+    --paper-raised: #ffffff;
+    --ink: #1c1b1a;
+    --ink-soft: #5c5952;
+    --line: #ddd8cc;
+    --accent: #35664b;      /* moss green — git/contribution signal */
+    --accent-soft: #e7eee6;
+    --rust: #a8552b;        /* rare highlight */
+    --radius: 10px;
+    --mono: 'JetBrains Mono', ui-monospace, monospace;
+    --display: 'Fraunces', Georgia, serif;
+    --body: 'Inter', -apple-system, sans-serif;
+  }
+
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--body);
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  a{ color:var(--accent); }
+
+  ::selection{ background:var(--accent-soft); }
+
+  .wrap{
+    max-width:760px;
+    margin:0 auto;
+    padding:0 24px;
+  }
+
+  /* ---------- header ---------- */
+  header.site{
+    border-bottom:1px solid var(--line);
+    padding:22px 0;
+  }
+  .site-row{
+    max-width:760px;
+    margin:0 auto;
+    padding:0 24px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:16px;
+  }
+  .brand{
+    font-family:var(--mono);
+    font-weight:600;
+    font-size:14px;
+    letter-spacing:0.02em;
+  }
+  .brand .pipe{ color:var(--ink-soft); font-weight:400; }
+  .site-path{
+    font-family:var(--mono);
+    font-size:13px;
+    color:var(--ink-soft);
+  }
+
+  /* ---------- hero ---------- */
+  .hero{ padding:56px 0 40px; }
+  .eyebrow{
+    font-family:var(--mono);
+    font-size:12px;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--accent);
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin-bottom:18px;
+  }
+  .eyebrow::before{
+    content:"";
+    width:7px; height:7px;
+    border-radius:50%;
+    background:var(--accent);
+    display:inline-block;
+  }
+  h1.title{
+    font-family:var(--display);
+    font-weight:600;
+    font-size:clamp(32px, 5.5vw, 46px);
+    line-height:1.08;
+    margin:0 0 16px;
+    letter-spacing:-0.01em;
+  }
+  h1.title em{
+    font-style:italic;
+    color:var(--accent);
+  }
+  .hero p.lede{
+    font-size:16.5px;
+    color:var(--ink-soft);
+    max-width:52ch;
+    margin:0 0 28px;
+  }
+
+  /* signature: activity graph */
+  .activity{
+    display:flex;
+    align-items:center;
+    gap:16px;
+    flex-wrap:wrap;
+  }
+  .activity-grid{
+    display:grid;
+    grid-template-columns:repeat(12, 9px);
+    grid-auto-rows:9px;
+    gap:3px;
+  }
+  .cell{
+    width:9px; height:9px;
+    border-radius:2px;
+    background:var(--line);
+    transition:background .5s ease;
+  }
+  .cell.on{ background:var(--accent); }
+  .activity-label{
+    font-family:var(--mono);
+    font-size:12px;
+    color:var(--ink-soft);
+    white-space:nowrap;
+  }
+  .activity-label b{ color:var(--ink); font-weight:600; }
+
+  /* ---------- directory listing ---------- */
+  main{ padding-bottom:72px; }
+
+  .directory{
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    overflow:hidden;
+    background:var(--paper-raised);
+  }
+  .folder + .folder{ border-top:1px solid var(--line); }
+
+  .folder-head{
+    width:100%;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:16px 20px;
+    background:none;
+    border:none;
+    cursor:pointer;
+    text-align:left;
+    font-family:var(--body);
+    color:var(--ink);
+  }
+  .folder-head:hover{ background:var(--accent-soft); }
+  .folder-head:focus-visible{
+    outline:2px solid var(--accent);
+    outline-offset:-2px;
+  }
+  .chevron{
+    font-family:var(--mono);
+    color:var(--accent);
+    font-size:13px;
+    transition:transform .25s ease;
+    flex-shrink:0;
+    width:14px;
+  }
+  .folder[data-open="true"] .chevron{ transform:rotate(90deg); }
+
+  .folder-path{
+    font-family:var(--mono);
+    font-size:15px;
+    font-weight:500;
+  }
+  .folder-count{
+    margin-left:auto;
+    font-family:var(--mono);
+    font-size:12px;
+    color:var(--ink-soft);
+  }
+
+  .folder-body{
+    display:grid;
+    grid-template-rows:0fr;
+    transition:grid-template-rows .35s ease;
+  }
+  .folder[data-open="true"] .folder-body{ grid-template-rows:1fr; }
+  .folder-body-inner{ overflow:hidden; }
+
+  .file-list{ padding:4px 12px 18px; }
+
+  .file{
+    border-top:1px dashed var(--line);
+  }
+  .file:first-child{ border-top:none; }
+
+  .file-head{
+    width:100%;
+    display:flex;
+    align-items:baseline;
+    gap:12px;
+    padding:13px 8px;
+    background:none;
+    border:none;
+    cursor:pointer;
+    text-align:left;
+    color:var(--ink);
+    font-family:var(--body);
+  }
+  .file-head:hover .q-text{ color:var(--accent); }
+  .file-head:focus-visible{
+    outline:2px solid var(--accent);
+    outline-offset:-1px;
+    border-radius:4px;
+  }
+  .q-num{
+    font-family:var(--mono);
+    font-size:12px;
+    color:var(--ink-soft);
+    flex-shrink:0;
+    padding-top:1px;
+  }
+  .q-text{
+    font-size:15.5px;
+    font-weight:500;
+    transition:color .15s ease;
+  }
+  .q-marker{
+    margin-left:auto;
+    font-family:var(--mono);
+    color:var(--accent);
+    font-size:14px;
+    flex-shrink:0;
+  }
+
+  .answer{
+    display:grid;
+    grid-template-rows:0fr;
+    transition:grid-template-rows .3s ease;
+  }
+  .file[data-open="true"] .answer{ grid-template-rows:1fr; }
+  .answer-inner{ overflow:hidden; }
+  .answer-content{
+    padding:2px 8px 18px 34px;
+    color:var(--ink-soft);
+    font-size:14.5px;
+    max-width:64ch;
+  }
+  .answer-content p{ margin:0 0 12px; }
+  .answer-content ul, .answer-content ol{
+    margin:0 0 12px;
+    padding-left:20px;
+  }
+  .answer-content li{ margin-bottom:5px; }
+  .answer-content .label{
+    font-family:var(--mono);
+    font-size:11.5px;
+    text-transform:uppercase;
+    letter-spacing:.06em;
+    color:var(--ink);
+    display:block;
+    margin:0 0 8px;
+  }
+
+  .insight{
+    margin:10px 8px 6px 34px;
+    padding:12px 14px;
+    background:var(--accent-soft);
+    border-left:2px solid var(--accent);
+    border-radius:0 6px 6px 0;
+    font-size:14px;
+    color:var(--ink);
+  }
+  .insight .label{
+    font-family:var(--mono);
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:.06em;
+    color:var(--accent);
+    display:block;
+    margin-bottom:6px;
+  }
+  .insight p{ margin:0; font-style:italic; }
+
+  /* ---------- footer ---------- */
+  footer.site{
+    border-top:1px solid var(--line);
+    padding:26px 0 40px;
+  }
+  footer.site .wrap{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:10px;
+  }
+  footer.site p{
+    margin:0;
+    font-size:13px;
+    color:var(--ink-soft);
+  }
+  footer.site .links{ display:flex; gap:18px; }
+  footer.site a{
+    font-family:var(--mono);
+    font-size:13px;
+    text-decoration:none;
+    color:var(--ink-soft);
+  }
+  footer.site a:hover{ color:var(--accent); }
+
+  @media (max-width:520px){
+    .activity-grid{ grid-template-columns:repeat(8, 9px); }
+    .folder-path{ font-size:14px; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ transition-duration:0.001ms !important; scroll-behavior:auto !important; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site">
+  <div class="site-row">
+    <div class="brand">OSS <span class="pipe">|</span> Let's Connect</div>
+    <div class="site-path">community/FAQ's</div>
+  </div>
+</header>
+
+<div class="hero wrap">
+  <div class="eyebrow">Frequently asked</div>
+  <h1 class="title">Answers, <em>versioned.</em></h1>
+  <p class="lede">Everything the community keeps asking - open source basics, Git &amp; GitHub, and contribution workflow - organized like a repo you can browse.</p>
+
+  <div class="activity">
+    <div class="activity-grid" id="activityGrid" aria-hidden="true"></div>
+    <div class="activity-label"><b id="openedCount">0</b>/<span id="totalCount">0</span> answers opened</div>
+  </div>
+</div>
+
+<main class="wrap">
+  <div class="directory" id="directory" role="presentation"></div>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <p>Maintained by the OSS | Let's Connect community.</p>
+    <div class="links">
+      <a href="#" id="githubLink">github</a>
+      <a href="#" id="discordLink">discord</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ============================================================
+   FAQ DATA
+   Add a new section by pushing an object into FAQ_DATA:
+   {
+     path: "/your-section-slug",
+     insight: "optional closing community quote" | null,
+     questions: [
+       {
+         q: "The question text?",
+         blocks: [
+           { type: "p",  text: "A paragraph." },
+           { type: "label", text: "Key Takeaways" },
+           { type: "ul", items: ["point one", "point two"] },
+           { type: "ol", items: ["step one", "step two"] }
+         ]
+       }
+     ]
+   }
+   ============================================================ */
+const FAQ_DATA = [
+  {
+    path: "/open-source-basics",
+    insight: "Consistency matters more than experience. Keep showing up, learning, and contributing.",
+    questions: [
+      {
+        q: "What is Open Source?",
+        blocks: [
+          { type: "p", text: "Open Source Software (OSS) is software whose source code is publicly available. Anyone can inspect it, use it, modify it, and contribute improvements according to the project's license." },
+          { type: "p", text: "Open source is much more than writing code. It is about collaboration, transparency, learning, and solving problems together." },
+          { type: "label", text: "Key Takeaways" },
+          { type: "ul", items: [
+            "Anyone can contribute.",
+            "Contributions include code, documentation, testing, design, translations, and bug reports.",
+            "Collaboration is more important than competition."
+          ]}
+        ]
+      },
+      {
+        q: "Why should students start contributing to Open Source?",
+        blocks: [
+          { type: "p", text: "Open source provides practical experience that traditional coursework often cannot." },
+          { type: "p", text: "By contributing to real projects, students learn:" },
+          { type: "ul", items: [
+            "How large software projects are organized.",
+            "Git and GitHub workflows.",
+            "Reading production-quality code.",
+            "Communicating with maintainers.",
+            "Receiving and applying code reviews.",
+            "Working in distributed teams."
+          ]},
+          { type: "p", text: "It also improves opportunities for programs like GSoC, LFX Mentorship, internships, and software engineering roles." }
+        ]
+      }
+    ]
+  },
+  {
+    path: "/git-and-github",
+    insight: "Members repeatedly emphasized understanding the project and its contribution guidelines before attempting fixes, rather than jumping directly into coding.",
+    questions: [
+      {
+        q: "Why is Git important for Open Source?",
+        blocks: [
+          { type: "p", text: "Git is the version control system used by almost every open-source project." },
+          { type: "p", text: "It allows contributors to:" },
+          { type: "ul", items: [
+            "Track code changes.",
+            "Work safely without affecting the main project.",
+            "Collaborate with developers worldwide.",
+            "Revert mistakes.",
+            "Manage multiple features simultaneously."
+          ]},
+          { type: "p", text: "Without Git, contributing to modern open-source projects would be extremely difficult." }
+        ]
+      },
+      {
+        q: "What should I do before creating my first Pull Request?",
+        blocks: [
+          { type: "p", text: "Before opening your first PR:" },
+          { type: "ol", items: [
+            "Read the project's README.md.",
+            "Read the CONTRIBUTING.md guidelines.",
+            "Understand the project's purpose.",
+            "Set up the project locally.",
+            "Look for beginner-friendly issues.",
+            "Discuss with maintainers if clarification is needed.",
+            "Test your changes before submitting."
+          ]},
+          { type: "p", text: "Following these steps significantly increases the chances of your PR being accepted." }
+        ]
+      }
+    ]
+  }
+];
+
+/* ============================================================
+   RENDER
+   ============================================================ */
+function renderBlocks(blocks){
+  return blocks.map(b => {
+    if(b.type === "p") return `<p>${b.text}</p>`;
+    if(b.type === "label") return `<span class="label">${b.text}</span>`;
+    if(b.type === "ul") return `<ul>${b.items.map(i=>`<li>${i}</li>`).join("")}</ul>`;
+    if(b.type === "ol") return `<ol>${b.items.map(i=>`<li>${i}</li>`).join("")}</ol>`;
+    return "";
+  }).join("");
+}
+
+const directoryEl = document.getElementById("directory");
+let totalQuestions = 0;
+let openedSet = new Set();
+
+const directoryHTML = FAQ_DATA.map((section, sIdx) => {
+  const questionsHTML = section.questions.map((item, qIdx) => {
+    totalQuestions++;
+    const num = String(qIdx + 1).padStart(2, "0");
+    const fileId = `f-${sIdx}-${qIdx}`;
+    return `
+    <div class="file" data-open="false" id="${fileId}">
+      <button class="file-head" aria-expanded="false">
+        <span class="q-num">${num}</span>
+        <span class="q-text">${item.q}</span>
+        <span class="q-marker">+</span>
+      </button>
+      <div class="answer">
+        <div class="answer-inner">
+          <div class="answer-content">
+            ${renderBlocks(item.blocks)}
+          </div>
+        </div>
+      </div>
+    </div>`;
+  }).join("");
+
+  const insightHTML = section.insight ? `
+    <div class="insight">
+      <span class="label">Community insight</span>
+      <p>&ldquo;${section.insight}&rdquo;</p>
+    </div>` : "";
+
+  return `
+  <div class="folder" data-open="false">
+    <button class="folder-head" aria-expanded="false">
+      <span class="chevron">&#9656;</span>
+      <span class="folder-path">${section.path}</span>
+      <span class="folder-count">${section.questions.length} questions</span>
+    </button>
+    <div class="folder-body">
+      <div class="folder-body-inner">
+        <div class="file-list">
+          ${questionsHTML}
+          ${insightHTML}
+        </div>
+      </div>
+    </div>
+  </div>`;
+}).join("");
+
+directoryEl.innerHTML = directoryHTML;
+document.getElementById("totalCount").textContent = totalQuestions;
+
+/* activity graph: one cell per question, fills as answers are opened */
+const gridEl = document.getElementById("activityGrid");
+for(let i = 0; i < totalQuestions; i++){
+  const cell = document.createElement("div");
+  cell.className = "cell";
+  cell.dataset.index = i;
+  gridEl.appendChild(cell);
+}
+
+function updateActivity(){
+  document.getElementById("openedCount").textContent = openedSet.size;
+  const cells = gridEl.querySelectorAll(".cell");
+  cells.forEach((c, i) => {
+    c.classList.toggle("on", i < openedSet.size);
+  });
+}
+
+/* event delegation: folders */
+directoryEl.addEventListener("click", (e) => {
+  const folderBtn = e.target.closest(".folder-head");
+  if(folderBtn){
+    const folder = folderBtn.closest(".folder");
+    const isOpen = folder.dataset.open === "true";
+    folder.dataset.open = String(!isOpen);
+    folderBtn.setAttribute("aria-expanded", String(!isOpen));
+    return;
+  }
+
+  const fileBtn = e.target.closest(".file-head");
+  if(fileBtn){
+    const file = fileBtn.closest(".file");
+    const isOpen = file.dataset.open === "true";
+    file.dataset.open = String(!isOpen);
+    fileBtn.setAttribute("aria-expanded", String(!isOpen));
+    fileBtn.querySelector(".q-marker").textContent = !isOpen ? "\u2212" : "+";
+
+    const fileId = file.id;
+    if(!isOpen){ openedSet.add(fileId); } else { openedSet.delete(fileId); }
+    updateActivity();
+  }
+});
+
+/* open the first folder by default for orientation */
+const firstFolder = directoryEl.querySelector(".folder");
+if(firstFolder){
+  firstFolder.dataset.open = "true";
+  firstFolder.querySelector(".folder-head").setAttribute("aria-expanded", "true");
+}
+</script>
+
+</body>
+</html>
